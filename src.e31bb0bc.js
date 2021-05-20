@@ -189,7 +189,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"./..\\images\\demo.jpg":[["demo.3a1bb503.jpg","images/demo.jpg"],"images/demo.jpg"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"code.js/color-switch.js":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"code.js/color-switch.js":[function(require,module,exports) {
 var colors = ['#FFFFFF', '#2196F3', '#4CAF50', '#FF9800', '#009688', '#795548'];
 var refs = {
   start: document.querySelector('button[data-action="start"]'),
@@ -197,7 +197,9 @@ var refs = {
   bodyColor: document.querySelector('body')
 };
 var TIME_DELAY = 1000;
-refs.start.addEventListener('click', startColorSwitch); //   refs.stop.addEventListener('click', callback);
+var intervalId = null;
+refs.start.addEventListener('click', startColorSwitch);
+refs.stop.addEventListener('click', stopColorSwitch);
 
 var randomIntegerFromInterval = function randomIntegerFromInterval(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -212,10 +214,24 @@ function randomColor() {
 ;
 
 function startColorSwitch(e) {
-  setInterval(function () {
+  intervalId = setInterval(function () {
     randomColor();
   }, TIME_DELAY);
+  e.target.disabled = 'true';
+  refs.start.removeEventListener('click', startColorSwitch);
+  refs.stop.addEventListener('click', stopColorSwitch);
 }
+
+;
+
+function stopColorSwitch(e) {
+  clearInterval(intervalId);
+  refs.start.removeAttribute('disabled');
+  refs.start.addEventListener('click', startColorSwitch);
+  refs.stop.removeEventListener('click', stopColorSwitch);
+}
+
+;
 },{}],"index.js":[function(require,module,exports) {
 "use strict";
 
@@ -250,7 +266,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58809" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64657" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
