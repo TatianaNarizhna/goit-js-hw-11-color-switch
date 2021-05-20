@@ -14,9 +14,10 @@ const colors = [
   }
 
   const TIME_DELAY = 1000;
+  let intervalId = null;
 
   refs.start.addEventListener('click', startColorSwitch);
-//   refs.stop.addEventListener('click', callback);
+  refs.stop.addEventListener('click', stopColorSwitch);
 
   const randomIntegerFromInterval = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -32,8 +33,20 @@ function randomColor () {
 
   function startColorSwitch (e) {
     
-    setInterval(() => {
+    intervalId = setInterval(() => {
         randomColor();
 
     }, TIME_DELAY);
-  }
+    e.target.disabled = 'true';
+    refs.start.removeEventListener('click', startColorSwitch);
+    refs.stop.addEventListener('click', stopColorSwitch);
+  };
+
+  function stopColorSwitch (e) {
+    clearInterval(intervalId);
+
+    refs.start.removeAttribute('disabled');
+    refs.start.addEventListener('click', startColorSwitch);
+    refs.stop.removeEventListener('click', stopColorSwitch);
+
+  };
